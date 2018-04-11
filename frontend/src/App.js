@@ -5,6 +5,10 @@ import * as ReadableAPI from './Utils/ReadableAPI';
 
 class App extends Component {
 
+    componentWillMount = () => {
+        // ReadableAPI.getAllPosts().then(res => {console.log(res)})
+
+    }
     render() {
         return (
           <div className="App">
