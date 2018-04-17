@@ -20,6 +20,18 @@ export const getAllPosts = () =>
     axios.get(`${api}/posts`, config)
         .then((res) => res.data);
 
+export const addPost = (title, body, author, category) =>
+    axios.post(`${api}/post`,
+        {
+            id: uuidv1(),
+            timestamp: Date.now(),
+            title: title,
+            body: body,
+            author: author,
+            category: category
+        }, config)
+        .then((res) => res.data);
+
 export const getSinglePost = (id) =>
     axios.get(`${api}/posts/${id}`, config)
         .then((res) => res.data);
@@ -44,11 +56,11 @@ export const getPostComments = (id) =>
     axios.get(`${api}/posts/${id}/comments`, config)
         .then((res) => res.data);
 
-export const addComment = (timestamp, body, author, parentID) =>
+export const addComment = (body, author, parentID) =>
     axios.post(`${api}/comments`,
         {
             id: uuidv1(),
-            timestamp: timestamp,
+            timestamp: Date.now(),
             body: body,
             author: author,
             parentId: parentID
@@ -67,8 +79,8 @@ export const downVoteComment = (id) =>
     axios.post(`${api}/comments/${id}`, {option: 'downVote'}, config)
         .then((res) => res.data);
 
-export const editComment = (id, timestamp, body) =>
-    axios.put(`${api}/comments/${id}`, {timestamp: timestamp, body: body}, config)
+export const editComment = (id, body) =>
+    axios.put(`${api}/comments/${id}`, {timestamp: Date.now(), body: body}, config)
         .then((res) => res.data);
 
 export const deleteComment = (id) =>
