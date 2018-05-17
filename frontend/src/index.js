@@ -7,9 +7,12 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import reducer from './Reducers'
 import { Provider } from 'react-redux';
 import logger from 'redux-logger';
-import { combineReducers } from 'redux';
+// import { combineReducers } from 'redux';
 import * as ReadableAPI from './Utils/ReadableAPI';
 import {addInitialStatePost} from "./Actions/Posts";
+import {addInitialStateCategories} from "./Actions/Categories";
+import { BrowserRouter } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__  || compose;
@@ -23,7 +26,9 @@ const store = createStore(
 
 ReactDOM.render(
     <Provider store={store}>
-        <App store={store}/>
+        <BrowserRouter>
+            <App store={store}/>
+        </BrowserRouter>
     </Provider>, document.getElementById('root')
 
 );
@@ -31,6 +36,7 @@ registerServiceWorker();
 
 //set up the initial state of the app
 ReadableAPI.getAllPosts().then(res => res.forEach((p) => {
+    console.log(p);
     store.dispatch(addInitialStatePost({
         id: p.id,
         author: p.author,
@@ -41,5 +47,12 @@ ReadableAPI.getAllPosts().then(res => res.forEach((p) => {
         timestamp: p.timestamp,
         title: p.title,
         voteScore: p.voteScore
+    }))
+}));
+
+ReadableAPI.getCategories().then(res => res.forEach((c) => {
+    store.dispatch(addInitialStateCategories({
+        name: c.name,
+        path: c.path
     }))
 }));

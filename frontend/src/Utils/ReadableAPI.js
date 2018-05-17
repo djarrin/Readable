@@ -21,7 +21,7 @@ export const getAllPosts = () =>
         .then((res) => res.data);
 
 export const addPost = (title, body, author, category) =>
-    axios.post(`${api}/post`,
+    axios.post(`${api}/posts`,
         {
             id: uuidv1(),
             timestamp: Date.now(),

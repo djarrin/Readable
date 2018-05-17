@@ -2,6 +2,8 @@ export const ADD_POST = 'ADD_POST';
 export const ADD_INTIAL_STATE_POST = 'ADD_INTIAL_STATE_POST';
 export const DELETE_POST = 'DELETE_POST';
 export const EDIT_POST = 'EDIT_POST';
+export const UP_VOTE_POST = 'UP_VOTE_POST';
+export const DOWN_VOTE_POST = 'DOWN_VOTE_POST';
 
 export function addPost({id, timestamp, body, author, category, title}) {
     return {
@@ -14,6 +16,22 @@ export function addPost({id, timestamp, body, author, category, title}) {
         title
     }
 
+}
+
+export function upVotePostUI({id, voteScore}) {
+    return {
+        type: UP_VOTE_POST,
+        id,
+        voteScore
+    }
+}
+
+export function downVotePostUI({id, voteScore}) {
+    return {
+        type: DOWN_VOTE_POST,
+        id,
+        voteScore
+    }
 }
 
 export function addInitialStatePost({id, timestamp, body, author, category, title, commentCount, deleted, voteScore}) {
