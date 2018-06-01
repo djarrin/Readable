@@ -1,12 +1,12 @@
-# Readable API Server
+# Readable Project
 
-This is the starter project for the final assessment project for Udacity's Redux course where you will build a content and comment web app. Users will be able to post content to predefined categories, comment on their posts and other users' posts, and vote on posts and comments. Users will also be able to edit and delete posts and comments.
+This is an application that allows user to create posts, comment on these posts, vote on comments and posts, edit comments and posts, sort posts by vote score or date of original post.
 
-This repository includes the code for the backend API Server that you'll use to develop and interact with the front-end portion of the project.
+A note is that data is presistant but has no authenitcation so any "user" can create any post/comment, edit any post/comment, with any username, even ones that already exist.
 
-## Start Developing
+## Start Using
 
-To get started developing right away:
+To get started right away:
 
 * Install and start the API server
     - `cd api-server`
