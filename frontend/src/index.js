@@ -36,7 +36,6 @@ registerServiceWorker();
 
 //set up the initial state of the app
 ReadableAPI.getAllPosts().then(res => res.forEach((p) => {
-    console.log(p);
     store.dispatch(addInitialStatePost({
         id: p.id,
         author: p.author,
@@ -50,6 +49,7 @@ ReadableAPI.getAllPosts().then(res => res.forEach((p) => {
     }))
 }));
 
+//set initial state for categories
 ReadableAPI.getCategories().then(res => res.forEach((c) => {
     store.dispatch(addInitialStateCategories({
         name: c.name,

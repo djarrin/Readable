@@ -21,9 +21,9 @@ export function editComment({id, timestamp, body}) {
     }
 }
 
-export function deleteComment({id}) {
+export function deleteComment({parentId}) {
     return {
         type: DELETE_COMMENT,
-        id
+        parentId
     }
 }

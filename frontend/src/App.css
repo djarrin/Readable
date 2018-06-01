@@ -69,7 +69,7 @@ h3.post-title {
   margin-bottom: 5px;
 }
 
-div.post-footer div.comment {
+div.post-footer div.comment, div.post-detail-button {
   width: 140px;
   padding: 5px;
   border: 1px solid #ba9077;
@@ -102,7 +102,7 @@ div.post-submit {
   width: 49%;
   margin: 10px auto 0 auto;
 }
-div.post-submit button {
+div.post-submit button, div.comment-form-container button {
   margin-top: 5px;
   width: 100%;
   background-color: #bcd5d1;
@@ -155,4 +155,70 @@ button.time-sort, button.vote-sort {
 button.time-sort.true, button.vote-sort.true {
   background-color: #bcd5d1;
   border-color: #ba9077;
+}
+
+div.comment-display, div.comment-form-container {
+  padding: 15px;
+  margin: 20px auto;
+  width: 49%;
+}
+
+div.comment-form-container {
+  width: 51%;
+}
+div.comment-form-container textarea {
+  margin-bottom: 5px;
+}
+div.comment-form-container #commentInput {
+  resize: none;
+}
+div.comment-form-container button {
+  width: 100%;
+}
+
+div.comment-display, .comment-edit-form {
+  border: 1px solid #ba9077;
+  border-radius: 5px;
+  background-color: #bcd5d1;
+  color: #5a5c51;
+}
+
+div.post-detail-button {
+  margin-top: 10px;
+}
+div.post-detail-button:hover {
+  cursor: pointer;
+}
+
+div.comment-author {
+  text-align: right;
+}
+div.comment-time {
+  float: right;
+}
+
+.modalDeleteButton {
+  position: fixed;
+}
+.modalDeleteButton:hover {
+  cursor: pointer;
+}
+
+.comment-edit-form {
+  width: 49%;
+  margin: 10px auto 0 auto;
+}
+.comment-edit-form .comment-form-container {
+  width: 100%;
+}
+.comment-display.true, .comment-edit-form.false {
+  display: none;
+}
+.comment-display.false, .comment-edit-form.true {
+  display: block;
+}
+
+.comment-edit-button {
+  text-decoration: underline;
+  float: right;
 }

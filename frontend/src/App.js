@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-// import * as ReadableAPI from './Utils/ReadableAPI';
 import { Route, withRouter } from 'react-router-dom'
 import {addPost} from "./Actions/Posts";
 import { connect } from 'react-redux'
@@ -9,8 +8,10 @@ import Post from './Components/Post';
 import Modal from 'react-modal';
 import PostForm from './Components/PostForm';
 import sortBy from 'sort-by';
-import { Button, Form, FormGroup, Alert, Input, FormText } from 'reactstrap';
+import { Button } from 'reactstrap';
 import FontAwsome from 'react-fontawesome'
+import {changeModalState} from "./Actions/Modal";
+import PostDetail from "./Components/PostDetail";
 
 
 class App extends Component {
@@ -38,6 +39,12 @@ class App extends Component {
         udacityVoteSelected: false
     }
 
+    componentWillMount() {
+        //binds Modal to the body
+        Modal.setAppElement('body');
+    }
+
+    //Responsible for toggling state that sorts posts by time
     timeSortToggle = (category) => {
         const {allTimeSort, reactTimeSort, reduxTimeSort, udacityTimeSort} = this.state;
         switch (category) {
@@ -112,6 +119,7 @@ class App extends Component {
         }
     }
 
+    //Responsible for toggling state that sorts posts by vote score
     voteSortToggle = (category) => {
         const {allVoteSort, reactVoteSort, reduxVoteSort, udacityVoteSort} = this.state;
         switch (category) {
@@ -186,6 +194,7 @@ class App extends Component {
         }
     }
 
+    //sends out the dispatch to add a new post
     addPost = () => {
         let timestamp = Date.now();
         this.props.store.dispatch(addPost({
@@ -197,8 +206,17 @@ class App extends Component {
             title: 'this is the title'
         }))
     }
+
+    //toggles state for modal
+    closeModal = () => {
+        let data = {
+            openState: false
+        }
+        this.props.store.dispatch(changeModalState(data))
+    }
+
     render() {
-        const { category, posts } = this.props;
+        const { category, posts, modal } = this.props;
 
         let allTimeChevron = this.state.allTimeSort === '-timestamp' ? <FontAwsome name={'chevron-down'}/>:<FontAwsome name={'chevron-up'}/>;
         let reactTimeChevron = this.state.reactTimeSort === '-timestamp' ? <FontAwsome name={'chevron-down'}/>:<FontAwsome name={'chevron-up'}/>;
@@ -211,10 +229,17 @@ class App extends Component {
         let udacityVoteChevron = this.state.udacityVoteSort === '-voteScore' ? <FontAwsome name={'chevron-down'}/>:<FontAwsome name={'chevron-up'}/>;
         return (
           <div className="App">
+              <Modal
+                isOpen={modal.openState}
+              >
+                  <FontAwsome name={"times-circle"} className={"modalDeleteButton"} size={"2x"} onClick={this.closeModal}/>
+                  <PostDetail/>
+              </Modal>
+
               <Route exact path={"/"} render={() => (
                   <div>
                       <MainNav categories={category} active={"all"}/>
-                      <PostForm defaultCat={"none"}/>
+                      <PostForm defaultCat={"none"} type={'add'}/>
                       <div className={"sort-container"}>
                           <Button
                               className={"time-sort " + this.state.allTimeSelected}
@@ -227,7 +252,7 @@ class App extends Component {
                       </div>
                       <ul className={"posts-list"}>
                           {posts.sort(sortBy(this.state.allSort)).map((post) => (
-                              <Post post={post}/>
+                              <Post post={post} key={post.id}/>
                           ))}
                       </ul>
                   </div>
@@ -235,7 +260,7 @@ class App extends Component {
               <Route path={"/react"} render={() => (
                   <div>
                     <MainNav categories={category} active={"react"}/>
-                      <PostForm defaultCat={"react"}/>
+                      <PostForm defaultCat={"react"} type={'add'}/>
                       <div className={"sort-container"}>
                           <Button
                               className={"time-sort " + this.state.reactTimeSelected}
@@ -252,7 +277,7 @@ class App extends Component {
                               return post;
                           }
                       }).map((post) => (
-                          <Post post={post}/>
+                          <Post post={post} key={post.id}/>
                       ))}
                       </ul>
                   </div>
@@ -260,7 +285,7 @@ class App extends Component {
               <Route path={"/redux"} render={() => (
                   <div>
                     <MainNav categories={category} active={"redux"}/>
-                      <PostForm defaultCat={"redux"}/>
+                      <PostForm defaultCat={"redux"} type={'add'}/>
                       <div className={"sort-container"}>
                           <Button
                               className={"time-sort " + this.state.reduxTimeSelected}
@@ -277,7 +302,7 @@ class App extends Component {
                               return post;
                           }
                       }).map((post) => (
-                          <Post post={post}/>
+                          <Post post={post} key={post.id}/>
                       ))}
                       </ul>
                   </div>
@@ -285,7 +310,7 @@ class App extends Component {
               <Route path={"/udacity"} render={() => (
                   <div>
                     <MainNav categories={category} active={"udacity"}/>
-                      <PostForm defaultCat={"udacity"}/>
+                      <PostForm defaultCat={"udacity"} type={'add'}/>
                       <div className={"sort-container"}>
                           <Button
                               className={"time-sort " + this.state.udacityTimeSelected}
@@ -313,14 +338,20 @@ class App extends Component {
   }
 }
 
-function mapStateToProps({posts, category}) {
+function mapStateToProps({posts, category, modal}) {
     return {
         posts: posts,
-        category: category
+        category: category,
+        modal: modal
+    }
+}
+function mapDispatchToProps(dispatch) {
+    return {
+        closeModal: (data) => dispatch(changeModalState(data)),
     }
 }
 
 export default withRouter(connect(
-    mapStateToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(App))
-// export default App;

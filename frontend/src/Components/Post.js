@@ -5,6 +5,7 @@ import FontAwsome from 'react-fontawesome';
 import * as ReadableAPI from '../Utils/ReadableAPI';
 import { connect } from 'react-redux';
 import {downVotePostUI, upVotePostUI, deletePost} from '../Actions/Posts';
+import {changeModalState} from '../Actions/Modal';
 
 class Post extends Component {
     static propTypes = {
@@ -12,6 +13,10 @@ class Post extends Component {
         dispatch: PropTypes.func.isRequired
     }
 
+    /**
+     * sends request to up vote a post
+     * and dispatches action to update
+     */
     upVote = () => {
         ReadableAPI.upVotePost(this.props.post.id).then(response => {
             let voteScore = response.voteScore;
@@ -23,6 +28,10 @@ class Post extends Component {
         })
     }
 
+    /**
+     * sends request to down vote a post
+     * and dispatches action to update
+     */
     downVote = () => {
         ReadableAPI.downVotePost(this.props.post.id).then(response => {
             let voteScore = response.voteScore;
@@ -34,6 +43,10 @@ class Post extends Component {
         })
     }
 
+    /**
+     * sends request delete a post
+     * and dispatches action to update
+     */
     deletePost = () => {
         ReadableAPI.deletePost(this.props.post.id).then((res) => {
             let data = {
@@ -41,6 +54,18 @@ class Post extends Component {
             }
             this.props.dispatch(deletePost(data))
         })
+    }
+
+    /**
+     * sends dispatch to open modal
+     * with the correct post attached
+     */
+    openPostDetail = () => {
+        let data = {
+            openState: true,
+            postID: this.props.post.id
+        }
+        this.props.dispatch(changeModalState(data))
     }
 
     render() {
@@ -53,8 +78,9 @@ class Post extends Component {
                         <div className={"post-date"}>{dateFormat(post.timestamp, 'mmmm d, yyyy')}</div>
                     </div>
                     <div className={"align-right"}>
-                        <div className={"post-author"}>{post.author}</div>
+                        <div className={"post-author"}>By {post.author}</div>
                         <FontAwsome name={"times-circle"} className={"deleteButton"} size={"2x"} onClick={this.deletePost}/>
+                        <div className={"post-detail-button"} onClick={this.openPostDetail}>Post Detail</div>
                     </div>
                 </div>
                 <div className={"post-body"}>
@@ -66,7 +92,7 @@ class Post extends Component {
                         <FontAwsome name="thumbs-up" className={"thumbs-up-icon"} onClick={this.upVote}/>
                         <FontAwsome name="thumbs-down" className={"thumbs-down-icon"} onClick={this.downVote}/>
                     </div>
-                    <div className={"comment"}>{post.commentCount}<FontAwsome name="comment" className={"comment-icon"}/> Comment</div>
+                    <div className={"comment"} onClick={this.openPostDetail}>{post.commentCount}<FontAwsome name="comment" className={"comment-icon"}/> Comment</div>
                 </div>
             </li>
         )
@@ -77,7 +103,8 @@ function mapDispatchToProps(dispatch) {
     return {
         upVote: (data) => dispatch(upVotePostUI(data)),
         downVote: (data) => dispatch(downVotePostUI(data)),
-        deletePost: (data) => dispatch(deletePost(data))
+        deletePost: (data) => dispatch(deletePost(data)),
+        openPostDetail: (data) => dispatch(changeModalState(data))
     }
 }
 
